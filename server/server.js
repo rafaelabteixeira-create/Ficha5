@@ -1,7 +1,14 @@
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+  origin: "http://localhost:5173"
+}));
+
+app.use(express.json());
 
 const cards = [
   { name: "Dragão de Cobalto", type: "Criatura", attack: 7, defense: 5 },
@@ -74,12 +81,7 @@ app.get("/agora", (req, res) => {
   res.send(page("Agora", `<p>Este pedido foi respondido às <b>${now}</b>.</p>`));
 });
 app.get("/api/cartas", (req, res) => {
-  const now = new Date().toLocaleString("pt-PT", {
-    dateStyle: "long",
-    timeStyle: "medium",
-  });
   res.json(cards);
-
 });
 
 app.get("/api/cartas", (req, res) => {

@@ -47,7 +47,8 @@ function App() {
       setRandomCard(cards[Math.floor(Math.random() * cards.length)]);
     }
   }
-  function addCard(e) {
+
+  async function addCard(e) {
     e.preventDefault();
 
     if (!name.trim() || attack === "") {
@@ -61,37 +62,38 @@ function App() {
       defense: 0
     };
 
-    setCards((prevCards) => [...prevCards, newCard]);
+    try {
+      const response = await fetch("http://localhost:3000/api/cartas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newCard)
+      });
 
-    setName("");
-    setType("Criatura");
-    setAttack("");
+      if (!response.ok) {
+        throw new Error("Erro HTTP: " + response.status);
+      }
+
+      const savedCard = await response.json();
+
+      setCards((prevCards) => [...prevCards, savedCard]);
+
+      setName("");
+      setType("Criatura");
+      setAttack("");
+
+    } catch (err) {
+      console.error("Erro ao adicionar carta:", err);
+      setError(err.message);
+    }
   }
+
   if (loading) {
     return <main><p>Carregar cartas</p></main>
   }
   if (error) {
     return <main><p>Erro: {error}</p></main>;
-  }
-  function addCard(e) {
-    e.preventDefault();
-
-    if (!name.trim() || attack === "") {
-      return;
-    }
-
-    const newCard = {
-      name: name.trim(),
-      type: type,
-      attack: Number(attack),
-      defense: 0
-    };
-
-    setCards((prevCards) => [...prevCards, newCard]);
-
-    setName("");
-    setType("Criatura");
-    setAttack("");
   }
   return (
     <main>
