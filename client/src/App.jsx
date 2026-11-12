@@ -94,10 +94,7 @@ function App() {
     setAttack("");
   }
   return (
-
     <main>
-
-
       <h1>A minha coleção</h1>
 
       <p>

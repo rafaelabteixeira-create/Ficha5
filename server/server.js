@@ -9,7 +9,7 @@ const cards = [
   { name: "Rito de Ferro", type: "Feitiço", attack: 0, defense: 0 },
   { name: "Sentinela de Âmbar", type: "Criatura", attack: 6, defense: 6 },
   { name: "Eco do Vazio", type: "Feitiço", attack: 0, defense: 0 },
-];  
+];
 
 function page(title, body) {
   return `<!DOCTYPE html>
@@ -30,6 +30,8 @@ function page(title, body) {
   </body>
 </html>`;
 }
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(page(
@@ -76,11 +78,21 @@ app.get("/api/cartas", (req, res) => {
     dateStyle: "long",
     timeStyle: "medium",
   });
-  res.set("Access-Control-Allow-Origin", "*");
   res.json(cards);
-  
+
 });
 
+app.get("/api/cartas", (req, res) => {
+  res.json(cards);
+});
+
+app.post("/api/cartas", (req, res) => {
+  const card = req.body;
+
+  cards.push(card);
+
+  res.status(201).json(card);
+});
 app.use((req, res) => {
   res.status(404).send(page(
     "404 — não encontrado",
