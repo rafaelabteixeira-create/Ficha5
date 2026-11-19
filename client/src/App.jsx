@@ -12,6 +12,7 @@ function App() {
   const [name, setName] = useState("");
   const [type, setType] = useState("Criatura");
   const [attack, setAttack] = useState("");
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     setLoading(true)
@@ -72,7 +73,7 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro HTTP: " + response.status);
+        throw new Error("HTTP: " + response.status);
       }
 
       const savedCard = await response.json();
@@ -165,6 +166,12 @@ function App() {
 
         <button type="submit">Adicionar carta</button>
       </form>
+      
+      {formError && (
+        <p style={{ color: "red" }}>
+          {formError}
+        </p>
+      )}
     </main>
   );
 }
